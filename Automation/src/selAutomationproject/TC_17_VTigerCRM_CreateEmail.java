@@ -12,6 +12,7 @@ import java.util.Set;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -20,10 +21,12 @@ public class TC_17_VTigerCRM_CreateEmail {
 		
 		System.setProperty("webdriver.chrome.driver","D:\\tet\\Selenium_Demp\\New chrome download\\chromedriver_win32\\chromedriver.exe");
 		ChromeDriver driver=new ChromeDriver();
-		//Create webdriverwait object
-		WebDriverWait wait=new WebDriverWait(driver,60);
+		
 		//URL
 		driver.get("http://classroom:8888/index.php?action=Login&module=Users");
+		//Create webdriverwait object
+		WebDriverWait wait=new WebDriverWait(driver,60);
+		
 		//Wait for home page to be displayed
 		if(wait.until(ExpectedConditions.titleIs("vtiger CRM 5 - Commercial Open Source CRM")))
 		{
@@ -246,8 +249,9 @@ else
 	Date d=new Date();
 	String today=date.format(d);
 
-	String strSubject="Nice message"+today;
-	driver.findElement(By.name("subject")).sendKeys(strSubject);
+	//String strSubject="Nice message12"+today;
+	String strcheck="testing12345";
+	driver.findElement(By.name("subject")).sendKeys(strcheck);
 	//Create object for robot class
 	Robot rt=new Robot();
 	StringSelection ss=new StringSelection("dskjfhjsdgvjdfgjkbdfukhgdfkhguidfhgiudhfguioh");
@@ -316,13 +320,38 @@ else
 	System.out.println("Email page is not displayed");
 }
 //enter the subject
-driver.findElement(By.name("search_text")).sendKeys(strSubject);
+driver.findElement(By.name("search_text")).sendKeys(strcheck);
 driver.findElement(By.name("find")).click();
-String strEmailName_Sibling=driver.findElement(By.xpath("//div[@id='rssScroll']/descendant::td[contains(text(),"+strSubject+")]/following-sibling::td")).getText();
+String strEmailName_Sibling=driver.findElement(By.xpath("//div[@id='rssScroll']/descendant::b[contains(text(),'testing12345')]")).getText();
 System.out.println(strEmailName_Sibling);
-/*if(strEmpName_Sibling.equals(sFirstName+" "+sLastNamewithTime))
+
+if(strEmailName_Sibling.equals(strcheck))
 {
-	System.out.println(strEmpName_Sibling+" displayed");
-}*/
+	System.out.println("Email is displayed");
+}
+else
+{
+	System.out.println("Email is not displayed");
+}
+
+Actions act=new Actions(driver);
+WebElement objimage=driver.findElement(By.xpath("/html/body/table/tbody/tr/td[3]/table/tbody/tr/td[2]/img"));
+
+//Move to image
+	act.moveToElement(objimage).perform();
+	driver.findElement(By.linkText("Sign Out")).click();
+	System.out.println("Logout successful");
+	Thread.sleep(2000);
+	//Wait for home page to be displayed
+		if(wait.until(ExpectedConditions.titleIs("vtiger CRM 5 - Commercial Open Source CRM")))
+		{
+			System.out.println("Home page is displayed");
+		}
+		else
+		{
+			System.out.println("Home page is not displayed");
+		}
+	driver.close();
+	driver.quit();
 }
 }
